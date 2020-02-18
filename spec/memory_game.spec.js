@@ -1,28 +1,67 @@
-describe("initialization", function(){
-    it ("should load all the tiles", function(){
-      expect(tiles).toBeDefined();
-  });
-  });
-    
-    describe("unflipCards", function(){
-    it ("should display the front card", function(){
-        expect(memory_tile_ids).toBeDefined();
+const {
+    shuffle,
+    startGame,
+    flashCards,
+    displayCard,
+    cardOpen,
+    matched,
+    unmatched,
+    disable,
+    enable,
+    moveCounter,
+    startTimer,
+    endGame,
+    playAgain
+} = require('../src/main');
+
+const fs = require('fs');
+const jsdom = require('jsdom');
+const {
+    JSDOM
+} = jsdom;
+
+const virtualConsole = new jsdom.VirtualConsole();
+virtualConsole.sendTo(console)
+
+const clickSimulator = (arg) => {
+    let event = new dom.window.MouseEvent('click', {
+        view: dom.window,
+        bubbles: true,
+        cancelable: false
+    })
+
+    let element = document.getElementsByTagName('li')[arg];
+    element.dispatchEvent(event);
+}
+
+const onClick = btn => {
+    btn.addEventListener('startGame', e => {
+        main.startGame();
     });
-  });
-   
-  describe("resetGameBoard", function(){
-    it ("should have all the tiles unflipped", function(){
-        expect(lockBoard,hasFlippedCard).toBe(false);
-    });
-    it ("should have the board unset", function(){
-    [hasFlippedCard, lockBoard] = [false, false];
-        expect(lockBoard).toBe(false);
-    });
-   
-   
-  })
-  describe("shuffleCards", function(){
-    it ("should be able to shuffle the tiles", function(){
-        expect(tiles).toBeDefined();
-    });
-  });
+
+    const e = new dom.window.Event("startGame");
+
+    btn.dispatchEvent(e);
+}
+
+beforeEach(() => {
+    const dom = new jsdom.JSDOM(fs.readFileSync(__dirname + '/fixture.js'));
+    global.document = dom.window.document;
+})
+
+afterEach(() => {
+    delete require.cache[require.resolve('../src/main')]
+})
+
+
+it('Should return start', function() {
+    const btn = document.getElementById('restartButton');
+    expect(btn.innerHTML).toBe('Restart');
+});
+
+it('should be defined', function() {
+    expect(shuffle).toBeDefined();
+});
+
+it('should be defined', function() {
+    expect(startGame.timer.innerHTML).toContain('0 mins 0 secs')
