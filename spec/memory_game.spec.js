@@ -65,3 +65,4 @@ it('should be defined', function() {
 
 it('should be defined', function() {
     expect(startGame.timer.innerHTML).toContain('0 mins 0 secs')
+});
