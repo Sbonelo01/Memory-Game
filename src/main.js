@@ -1,34 +1,11 @@
-
 // Main Game Play
-var cardElements = document.getElementsByClassName('game-card');
-var cardElementsArray = [...cardElements];
-var imgElements = document.getElementsByClassName('game-card-img');
-var imgElementsArray = [...imgElements];
-var starElements = document.getElementsByClassName('star');
-var starElementsArray = [...starElements];
-var counter = document.getElementById('moveCounter');
-var timer = document.getElementById('timer');
-var modalElement = document.getElementById('gameOverModal');
-var totalGameMovesElement = document.getElementById('totalGameMoves');
-var totalGameTimeElement = document.getElementById('totalGameTime');
-var finalStarRatingElement = document.getElementById('finalStarRating');
-var closeModalIcon = document.getElementById('closeModal');
-var openedCards = [];
-var matchedCards =  [];
-var moves;
-var second = 0,
-    minute = 0,
-    hour = 0,
-    interval,
-    totalGameTime,
-    starRating;
 
 function shuffle(array) {
-    var currentIndex = array.length,
+    let currentIndex = array.length,
         temporaryValue,
         randomIndex;
 
-    while (currentIndex !==0) {
+    while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
         temporaryValue = array[currentIndex];
@@ -40,11 +17,15 @@ function shuffle(array) {
 }
 
 function startGame() {
-    //shuffle cards
-    var shuffledImages = shuffle(imgElementsArray);
+    let moves;
+    let counter = global.window.getElementById('moveCounter');
+    let imgElements = global.window.getElementsByClassName('game-card-img');
+    let cardElementsArray = [...cardElements];
+    let imgElementsArray = [...imgElements];
+    let shuffledImages = shuffle(imgElementsArray);
+    let cardElements = global.window.getElementsByClassName('game-card');
 
-
-    for(i=0; i<shuffledImages.length; i++) {
+    for (i = 0; i < shuffledImages.length; i++) {
         //remove all images from previous games from each card (if any)
         cardElements[i].innerHTML = "";
 
@@ -58,7 +39,7 @@ function startGame() {
     }
 
     //listen for events on the cards
-    for(var i = 0; i < cardElementsArray.length; i++) {
+    for (let i = 0; i < cardElementsArray.length; i++) {
         cardElementsArray[i].addEventListener("click", displayCard)
     }
 
@@ -70,7 +51,7 @@ function startGame() {
     counter.innerText = `${moves} move(s)`;
 
     //reset star rating
-    for(var i=0; i<starElementsArray.length; i++) {
+    for (let i = 0; i < starElementsArray.length; i++) {
         starElementsArray[i].style.opacity = 1;
     }
 
@@ -80,11 +61,12 @@ function startGame() {
 }
 
 function flashCards() {
-    for(i=0; i<cardElements.length; i++) {
+    let cardElements = global.window.getElementsByClassName('game-card');
+    for (i = 0; i < cardElements.length; i++) {
         cardElements[i].children[0].classList.add("show-img")
     }
-    setTimeout(function(){
-        for(i=0; i<cardElements.length; i++) {
+    setTimeout(function() {
+        for (i = 0; i < cardElements.length; i++) {
             cardElements[i].children[0].classList.remove("show-img")
         }
     }, 1000)
@@ -97,13 +79,14 @@ function displayCard() {
     this.classList.toggle("disabled");
     cardOpen(this);
 }
-
+    
 function cardOpen(card) {
+    let openedCards = [];
     openedCards.push(card);
-    var len = openedCards.length;
-    if(len === 2) {
+    let len = openedCards.length;
+    if (len === 2) {
         moveCounter();
-        if(openedCards[0].type === openedCards[1].type) {
+        if (openedCards[0].type === openedCards[1].type) {
             matched();
         } else {
             unmatched();
@@ -112,6 +95,8 @@ function cardOpen(card) {
 }
 
 function matched() {
+    let matchedCards = [];
+    let openedCards = [];
     openedCards[0].classList.add("match");
     openedCards[1].classList.add("match");
     openedCards[0].classList.remove("show", "open");
@@ -119,12 +104,14 @@ function matched() {
     matchedCards.push(openedCards[0]);
     matchedCards.push(openedCards[1]);
     openedCards = [];
-    if(matchedCards.length == 16) {
+    if (matchedCards.length == 16) {
         endGame();
     }
 }
 
 function unmatched() {
+    let matchedCards = [];
+    let openedCards = [];
     openedCards[0].classList.add("unmatched");
     openedCards[1].classList.add("unmatched");
     disable();
@@ -135,30 +122,43 @@ function unmatched() {
         openedCards[1].children[0].classList.remove('show-img');
         enable();
         openedCards = [];
-        
+
     }, 1100)
 }
 
 function disable() {
+    let cardElements = global.window.getElementsByClassName('game-card');
+    let cardElementsArray = [...cardElements];
     cardElementsArray.filter((card, i, cardElementsArray) => {
         card.classList.add('disabled');
     })
 }
 
 function enable() {
+    let matchedCards = [];
+    let cardElements = global.window.getElementsByClassName('game-card');
+    let cardElementsArray = [...cardElements];
     cardElementsArray.filter((card, i, cardElementsArray) => {
         card.classList.remove('disabled');
-        for(var i=0; i<matchedCards.length; i++) {
+        for (let i = 0; i < matchedCards.length; i++) {
             matchedCards[i].classList.add('disabled');
         }
     })
 }
 
 function moveCounter() {
+    let second = 0,
+        minute = 0,
+        hour = 0,
+        interval,
+        totalGameTime,
+        starRating;
+    let moves;
+    let counter = global.window.getElementById('moveCounter');
     moves++;
     counter.innerHTML = `${moves} move(s)`;
 
-    if(moves == 1) {
+    if (moves == 1) {
         second = 0;
         minute = 0;
         hour = 0;
@@ -166,31 +166,31 @@ function moveCounter() {
     }
 
     //setting rating based on moves
-    if(moves > 8 && moves <= 12) {
-        for(var i=0; i<5; i++) {
-            starElementsArray[i].opacity = 1; 
+    if (moves > 8 && moves <= 12) {
+        for (let i = 0; i < 5; i++) {
+            starElementsArray[i].opacity = 1;
         }
-    } else if(moves > 12 && moves <= 16) {
-        for(var i=0; i<5; i++) {
-            if(i > 3) {
+    } else if (moves > 12 && moves <= 16) {
+        for (let i = 0; i < 5; i++) {
+            if (i > 3) {
                 starElementsArray[i].style.opacity = 0.1;
             }
         }
-    } else if(moves > 16 && moves <= 20) {
-        for(var i=0; i<5; i++) {
-            if(i > 2) {
+    } else if (moves > 16 && moves <= 20) {
+        for (let i = 0; i < 5; i++) {
+            if (i > 2) {
                 starElementsArray[i].style.opacity = 0.1;
             }
         }
-    } else if(moves > 20 && moves <= 24) {
-        for(var i=0; i<5; i++) {
-            if(i > 1) {
+    } else if (moves > 20 && moves <= 24) {
+        for (let i = 0; i < 5; i++) {
+            if (i > 1) {
                 starElementsArray[i].style.opacity = 0.1;
             }
         }
-    } else if(moves > 24){
-        for(var i=0; i<5; i++) {
-            if(i > 0) {
+    } else if (moves > 24) {
+        for (let i = 0; i < 5; i++) {
+            if (i > 0) {
                 starElementsArray[i].style.opacity = 0.1;
             }
         }
@@ -198,14 +198,20 @@ function moveCounter() {
 }
 
 function startTimer() {
-    interval = setInterval(function(){
+    let second = 0,
+        minute = 0,
+        hour = 0,
+        interval,
+        totalGameTime,
+        starRating;
+    interval = setInterval(function() {
         timer.innerHTML = `${minute} mins ${second} secs`;
         second++;
-        if(second == 60) {
+        if (second == 60) {
             minute++;
             second = 0;
         }
-        if(minute == 60) {
+        if (minute == 60) {
             hour++;
             minute = 0;
         }
@@ -213,13 +219,17 @@ function startTimer() {
 }
 
 function endGame() {
+    let moves;
+    let finalStarRatingElement = global.window.getElementById('finalStarRating');
+    let totalGameTimeElement = global.window.getElementById('totalGameTime');
+    let totalGameMovesElement = global.window.getElementById('totalGameMoves');
     clearInterval(interval);
     totalGameTime = timer.innerHTML;
-    starRating = document.querySelector('.rating').innerHTML;
+    starRating = global.window.querySelector('.rating').innerHTML;
 
     //show modal on game end
     modalElement.classList.add("show-modal");
-    
+
     //show totalGameTime, moves and finalStarRating in Modal
     totalGameTimeElement.innerHTML = totalGameTime;
     totalGameMovesElement.innerHTML = moves;
@@ -230,6 +240,7 @@ function endGame() {
 }
 
 function closeModal() {
+    let closeModalIcon = global.window.getElementById('closeModal');
     closeModalIcon.addEventListener("click", function() {
         modalElement.classList.remove("show-modal");
         startGame();
@@ -242,8 +253,24 @@ function playAgain() {
 }
 
 // wait for some milliseconds before game starts
-window.onload = function () {
+onload = function() {
     setTimeout(function() {
         startGame()
     }, 1200);
+}
+
+module.exports = {
+    shuffle,
+    startGame,
+    flashCards,
+    displayCard,
+    cardOpen,
+    matched,
+    unmatched,
+    disable,
+    enable,
+    moveCounter,
+    startTimer,
+    endGame,
+    playAgain
 }
