@@ -62,7 +62,3 @@ it('Should return start', function() {
 it('should be defined', function() {
     expect(shuffle).toBeDefined();
 });
-
-it('should be defined', function() {
-    expect(startGame.timer.innerHTML).toContain('0 mins 0 secs')
-});
