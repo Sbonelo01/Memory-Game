@@ -247,3 +247,19 @@ window.onload = function () {
         startGame()
     }, 1200);
 }
+
+module.exports = {
+    shuffle,
+    startGame,
+    flashCards,
+    displayCard,
+    cardOpen,
+    matched,
+    unmatched,
+    disable,
+    enable,
+    moveCounter,
+    startTimer,
+    endGame,
+    playAgain
+}   
